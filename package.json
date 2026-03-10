@@ -1,0 +1,14 @@
+{
+  "name": "web-voting",
+  "version": "1.0.0",
+  "description": "Web untuk tugas cloud computing dengan firebase",
+  "author": "I Wayan Budiana",
+  "license": "ISC",
+  "scripts": {
+    "seed": "concurrently \"npm run seed --prefix backend\"",
+    "dev": "concurrently -n backend,frontend -c green,blue \"npm run dev --prefix backend\" \"npm run dev --prefix frontend\""
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}

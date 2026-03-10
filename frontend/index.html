@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sistem E-Voting Desa Maju Jaya</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      [x-cloak] {
+        display: none !important;
+      }
+    </style>
+    <script>
+      // Immediate theme detection to prevent flash
+      const getCookie = (name) => {
+        return document.cookie.split("; ").reduce((r, v) => {
+          const parts = v.split("=");
+          return parts[0] === name ? decodeURIComponent(parts[1]) : r;
+        }, "");
+      };
+      const theme =
+        getCookie("theme") ||
+        (window.matchMedia("(prefers-color-scheme: dark)").matches
+          ? "dark"
+          : "light");
+      if (theme === "dark") document.documentElement.classList.add("dark");
+    </script>
+  </head>
+  <body
+    class="font-sans antialiased transition-colors duration-300"
+    x-data="app"
+    x-cloak
+  >
+    <div id="app"></div>
+
+    <!-- Toast Notifications -->
+    <div
+      class="fixed top-6 right-6 z-9999 flex flex-col gap-3 pointer-events-none"
+    >
+      <template x-for="toast in toasts" :key="toast.id">
+        <div
+          x-transition:enter="transition ease-out duration-500 transform"
+          x-transition:enter-start="translate-x-full opacity-0 scale-90"
+          x-transition:enter-end="translate-x-0 opacity-100 scale-100"
+          x-transition:leave="transition ease-in duration-300 transform"
+          x-transition:leave-start="translate-x-0 opacity-100 scale-100"
+          x-transition:leave-end="translate-x-full opacity-0 scale-90"
+          :class="{
+                    'border-emerald-500/20 bg-emerald-50 text-emerald-900': toast.type === 'success',
+                    'border-red-500/20 bg-red-50 text-red-900': toast.type === 'error',
+                    'border-amber-500/20 bg-amber-50 text-amber-900': toast.type === 'warning'
+                }"
+          class="pointer-events-auto flex items-center gap-4 px-6 py-4 rounded-[24px] shadow-2xl shadow-black/5 min-w-[320px] border backdrop-blur-xl"
+        >
+          <div
+            :class="{
+                    'bg-emerald-500 text-white': toast.type === 'success',
+                    'bg-red-500 text-white': toast.type === 'error',
+                    'bg-amber-500 text-white': toast.type === 'warning'
+                }"
+            class="shrink-0 w-10 h-10 rounded-2xl flex items-center justify-center shadow-lg transform rotate-3"
+          >
+            <template x-if="toast.type === 'success'">
+              <svg
+                class="w-6 h-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2.5"
+                  d="M5 13l4 4L19 7"
+                ></path>
+              </svg>
+            </template>
+            <template x-if="toast.type === 'error'">
+              <svg
+                class="w-6 h-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2.5"
+                  d="M6 18L18 6M6 6l12 12"
+                ></path>
+              </svg>
+            </template>
+          </div>
+          <div class="flex flex-col">
+            <span
+              class="font-bold text-[15px]"
+              x-text="toast.type === 'success' ? 'Berhasil' : 'Pemberitahuan'"
+            ></span>
+            <span class="text-sm opacity-80" x-text="toast.message"></span>
+          </div>
+        </div>
+      </template>
+    </div>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
