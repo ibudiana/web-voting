@@ -26,22 +26,38 @@ export const Sidebar = `
         </div>
 
         <nav class="space-y-2 flex-1" x-data>
-            <button @click="$dispatch('navigate', 'dashboard')" 
-               :class="currentPage === 'dashboard' ? 'active-nav' : 'text-slate-500 hover:bg-slate-50 dark:hover:bg-slate-800/50'"
-               class="w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all font-semibold">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>
+            <!-- Dashboard: Semua user bisa akses -->
+            <button 
+                @click="$dispatch('navigate', 'dashboard')" 
+                :class="currentPage === 'dashboard' ? 'active-nav' : 'text-slate-500 hover:bg-slate-50 dark:hover:bg-slate-800/50'"
+                class="w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all font-semibold">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                </svg>
                 Beranda
             </button>
-            <button @click="$dispatch('navigate', 'users')" 
-               :class="currentPage === 'users' ? 'active-nav' : 'text-slate-500 hover:bg-slate-50 dark:hover:bg-slate-800/50'"
-               class="w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all font-semibold">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
+
+            <!-- Manajemen Warga: Hanya admin -->
+            <button 
+                x-show="user?.role === 'admin'" 
+                @click="$dispatch('navigate', 'users')" 
+                :class="currentPage === 'users' ? 'active-nav' : 'text-slate-500 hover:bg-slate-50 dark:hover:bg-slate-800/50'"
+                class="w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all font-semibold">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                </svg>
                 Manajemen Warga
             </button>
-            <button @click="$dispatch('navigate', 'candidates')" 
-               :class="currentPage === 'candidates' ? 'active-nav' : 'text-slate-500 hover:bg-slate-50 dark:hover:bg-slate-800/50'"
-               class="w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all font-semibold">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" /></svg>
+
+            <!-- Manajemen Paslon: Hanya admin -->
+            <button 
+                x-show="user?.role === 'admin'" 
+                @click="$dispatch('navigate', 'candidates')" 
+                :class="currentPage === 'candidates' ? 'active-nav' : 'text-slate-500 hover:bg-slate-50 dark:hover:bg-slate-800/50'"
+                class="w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all font-semibold">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                </svg>
                 Manajemen Paslon
             </button>
         </nav>
@@ -59,7 +75,7 @@ export const Sidebar = `
 </aside>
 `;
 
-export const Header = (title, subtitle, actions = '') => `
+export const Header = (title, subtitle, actions = "") => `
 <header class="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-10">
     <div class="flex items-center gap-4">
         <button @click="toggleSidebar" class="md:hidden p-2.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-slate-600 dark:text-slate-400 shadow-sm active:scale-95 transition-all">
@@ -90,16 +106,26 @@ export const Header = (title, subtitle, actions = '') => `
             </button>
 
             <div class="flex items-center gap-3 pl-1">
-                <div class="text-right hidden lg:block">
-                    <p class="text-sm font-bold text-slate-800 dark:text-white leading-none mb-1">Admin Desa</p>
-                    <p class="text-[10px] font-bold text-indigo-500 dark:text-indigo-400 uppercase tracking-tighter">Super Administrator</p>
-                </div>
+            <div class="text-right hidden lg:block">
+                <p class="text-sm font-bold text-slate-800 dark:text-white leading-none mb-1"
+                x-text="user?.fullName || 'Guest'"></p>
+
+                <p class="text-[10px] font-bold text-indigo-500 dark:text-indigo-400 uppercase tracking-tighter"
+                x-text="user?.role || 'User'"></p>
+            </div>
                 <div class="w-11 h-11 md:w-12 md:h-12 rounded-2xl bg-indigo-600 flex items-center justify-center text-white font-black shadow-lg shadow-indigo-200 dark:shadow-indigo-900/30 ring-4 ring-white dark:ring-slate-900 transition-all">
-                    AD
+                    <span x-text="user ? user.fullName.split(' ').map(n => n[0]).join('').toUpperCase() : 'G'"></span>
                 </div>
             </div>
+
+             <button @click="logout" 
+                class="w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all font-semibold text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-500/10 mt-2">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                </svg>
+                Logout
+            </button>
         </div>
     </div>
 </header>
 `;
-

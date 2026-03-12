@@ -6,7 +6,13 @@ import apiRoutes from "./routes/api.js";
 const app = express();
 
 // Middleware
-app.use(cors());
+app.use(
+  cors({
+    origin: "http://localhost:5173", // ganti sesuai port frontend
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true,
+  }),
+);
 app.use(express.json());
 
 // Root route

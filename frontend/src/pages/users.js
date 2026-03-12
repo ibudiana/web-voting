@@ -1,15 +1,19 @@
-import { Sidebar, Header } from '../components/layout.js';
+import { Sidebar, Header } from "../components/layout.js";
 
 export const UsersPage = `
 <div class="flex min-h-screen" x-cloak>
     ${Sidebar}
     <main class="flex-1 md:ml-72 p-4 md:p-8 transition-all duration-300 dark:bg-slate-950">
-        ${Header('Daftar Pemilih Tetap', 'Kelola data warga untuk keperluan pemilihan', `
+        ${Header(
+          "Daftar Pemilih Tetap",
+          "Kelola data warga untuk keperluan pemilihan",
+          `
             <button @click="openAddModal" class="bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2.5 rounded-xl font-bold shadow-md shadow-indigo-200 dark:shadow-none transition-all flex items-center gap-2 active:scale-95 text-xs whitespace-nowrap">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 6v6m0 0v6m0-6h6m-6 0H6" /></svg>
                 Tambah Warga
             </button>
-        `)}
+        `,
+        )}
 
         <div class="card dark:bg-slate-900 overflow-hidden p-0!">
             <div class="overflow-x-auto">
@@ -52,7 +56,7 @@ export const UsersPage = `
                                 </td>
                                 <td class="px-6 py-5 text-sm">
                                     <div class="font-bold text-slate-700 dark:text-slate-300 mb-1" x-text="user.nik"></div>
-                                    <div class="text-[11px] text-slate-400 font-medium truncate max-w-[200px]" x-text="user.alamat || 'Alamat belum diatur'"></div>
+                                    <div class="text-[11px] text-slate-400 font-medium truncate max-w-50" x-text="user.alamat || 'Alamat belum diatur'"></div>
                                 </td>
                                 <td class="px-6 py-5 text-sm">
                                     <span :class="user.role === 'admin' ? 'bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400' : 'bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400'" class="px-3 py-1 rounded-lg text-[10px] font-black uppercase tracking-wider" x-text="user.role"></span>

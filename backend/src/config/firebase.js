@@ -1,11 +1,12 @@
 import { initializeApp } from "firebase/app";
 import { getDatabase } from "firebase/database";
-import { firebaseConfig } from './env.js';
+import { firebaseConfig } from "./env.js";
+import { getAuth } from "firebase/auth";
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 
-// Initialize Realtime Database and get a reference to the service
 const db = getDatabase(app);
+const auth = getAuth(app);
 
-export { app, db };
+export { app, db, auth };

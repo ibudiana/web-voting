@@ -1,8 +1,8 @@
-import { db } from "../../config/firebase.js";
+import { db, auth } from "../../config/firebase.js";
 import { ref, get, set, update, remove, push } from "firebase/database";
+import { createUserWithEmailAndPassword } from "firebase/auth";
 
 class UserRepository {
-
   // Ambil semua user, sertakan id dari key Firebase
   async findAll() {
     const snapshot = await get(ref(db, "users"));
@@ -12,7 +12,7 @@ class UserRepository {
     // Konversi object ke array dengan id = key Firebase
     return Object.entries(usersObj).map(([key, user]) => ({
       id: key,
-      ...user
+      ...user,
     }));
   }
 
@@ -25,25 +25,74 @@ class UserRepository {
   }
 
   // Create user baru tanpa menyimpan field id
+  // async create(userData) {
+  //   const usersRef = ref(db, "users");
+  //   const newUserRef = push(usersRef); // Firebase key otomatis
+  //   const now = new Date().toISOString();
+
+  //   const { id, ...cleanUserData } = userData; // buang id
+
+  //   const newUser = {
+  //     ...cleanUserData,
+  //     hasVoted: false,
+  //     createdAt: now,
+  //     updatedAt: now,
+  //   };
+
+  //   await set(newUserRef, newUser);
+
+  //   return {
+  //     id: newUserRef.key,
+  //     ...newUser,
+  //   };
+  // }
   async create(userData) {
-    const usersRef = ref(db, "users");
-    const newUserRef = push(usersRef); // Firebase key otomatis
-    const now = new Date().toISOString();
+    let { email, password, nik, fullName, username, role } = userData;
 
-    const { id, ...cleanUserData } = userData; // buang id
+    // Default password for seeding, can be overridden by payload
+    if (!password) {
+      password = "password"; // Default password for seeding
+    }
 
-    const newUser = {
-      ...cleanUserData,
-      createdAt: now,
-      updatedAt: now,
-    };
+    try {
+      // Step 1: Create user in Firebase Authentication
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password,
+      );
+      const user = userCredential.user;
+      const now = new Date().toISOString();
 
-    await set(newUserRef, newUser);
+      // Prepare user data
+      const userData = {
+        email,
+        nik,
+        fullName,
+        username,
+        role,
+        hasVoted: false,
+        createdAt: now,
+        updatedAt: now,
+      };
 
-    return {
-      id: newUserRef.key,
-      ...newUser
-    };
+      // Step 2: Save user data to Firebase Realtime Database
+      const userRef = ref(db, `users/${user.uid}`);
+      await set(userRef, userData);
+
+      // Get the user's ID token
+      const token = await user.getIdToken();
+
+      // Return user data with the Firebase UID and token
+      return {
+        id: user.uid,
+        ...userData,
+        token,
+      };
+    } catch (error) {
+      console.error("Error registering user:", error);
+      throw new Error("Failed to register user");
+    }
   }
 
   // Update user by id (tidak menyentuh id di DB)
@@ -53,7 +102,7 @@ class UserRepository {
 
     await update(ref(db, `users/${id}`), {
       ...cleanUserData,
-      updatedAt: now
+      updatedAt: now,
     });
 
     return this.findById(id);

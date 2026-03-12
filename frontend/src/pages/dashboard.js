@@ -1,10 +1,10 @@
-import { Sidebar, Header } from '../components/layout.js';
+import { Sidebar, Header } from "../components/layout.js";
 
 export const DashboardPage = `
 <div class="flex min-h-screen">
     ${Sidebar}
     <main class="flex-1 md:ml-72 p-4 md:p-10 transition-all duration-300 dark:bg-slate-950">
-        ${Header('Dashboard Utama', 'Ringkasan operasional E-Voting Desa Maju Jaya')}
+        ${Header("Dashboard Utama", "Ringkasan operasional E-Voting Desa Maju Jaya")}
         
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 mb-12">
             <div class="card group">
@@ -65,7 +65,25 @@ export const DashboardPage = `
                 </div>
             </div>
 
-            <div class="bg-indigo-600 dark:bg-indigo-900 rounded-[40px] p-10 md:p-12 text-white relative overflow-hidden shadow-2xl transition-all duration-300">
+            <!-- Tombol Vote untuk User Biasa -->
+            <div x-show="user.role === 'user'" class="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-12">
+                <template x-for="candidate in candidates" :key="candidate.id">
+                    <div class="card p-6 flex items-center justify-between gap-4">
+                        <div>
+                            <h4 class="font-black text-slate-800 dark:text-white text-lg" x-text="candidate.name"></h4>
+                            <p class="text-sm text-slate-500 dark:text-slate-400">No. Urut: <span x-text="candidate.number"></span></p>
+                        </div>
+                        <button @click="castVote(candidate.id)"
+                                :disabled="hasVoted"
+                                :class="hasVoted ? 'bg-gray-400 cursor-not-allowed' : 'bg-indigo-600 hover:bg-indigo-700'"
+                                class="text-white px-5 py-2 rounded-xl font-bold shadow-md dark:shadow-none transition-all active:scale-95">
+                            Vote
+                        </button>
+                    </div>
+                </template>
+            </div>
+
+            <div x-show="user.role === 'admin'" class="bg-indigo-600 dark:bg-indigo-900 rounded-[40px] p-10 md:p-12 text-white relative overflow-hidden shadow-2xl transition-all duration-300">
                 <div class="absolute top-0 right-0 -mr-20 -mt-20 w-80 h-80 bg-white/5 rounded-full blur-3xl"></div>
                 
                 <div class="relative z-10">
