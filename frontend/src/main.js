@@ -27,7 +27,7 @@ const deleteCookie = (name) => {
 
 document.addEventListener("alpine:init", () => {
   Alpine.data("app", () => ({
-    apiUrl: "http://localhost:5001/api",
+    apiUrl: import.meta.env.VITE_BACKEND_URL,
     currentPage: "register", // 'login', 'register', 'dashboard', 'users', 'candidates'
     theme: "light",
     isSidebarOpen: false,
