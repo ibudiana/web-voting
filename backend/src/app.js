@@ -6,9 +6,14 @@ import apiRoutes from "./routes/api.js";
 const app = express();
 
 // Middleware
+const allowedOrigins = [
+  "http://localhost:5173", // URL untuk development lokal
+  "https://web-voting-3fkb.onrender.com", // URL untuk frontend yang di-deploy di Render
+];
+
 app.use(
   cors({
-    origin: "http://localhost:5173", // ganti sesuai port frontend
+    origin: allowedOrigins,
     allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true,
   }),
